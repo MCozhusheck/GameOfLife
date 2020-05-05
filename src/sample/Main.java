@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -46,7 +47,13 @@ public class Main extends Application {
             rowConst.setVgrow(Priority.ALWAYS);
             root.getRowConstraints().add(rowConst);
         }
-        primaryStage.setScene(new Scene(root, 800, 600));
+        Scene scene = new Scene(root, 800, 600);
+        scene.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.ENTER) {
+                game.nextPattern();
+            }
+        });
+        primaryStage.setScene(scene);
         primaryStage.show();
         game.displaySteps(root);
 
