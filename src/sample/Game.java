@@ -7,53 +7,81 @@ import javafx.scene.layout.GridPane;
 
 public class Game {
     public Grid grid;
+    private int currentPattern = 0;
     public Game() {
         boolean[][] grid = randomArray(50,50);
         this.grid = new Grid(grid);
     }
-
-    public void showSteps(int stepCount) {
-        for(int i=0; i<stepCount; i++) {
-            grid.showGrid();
-            grid.nextStep();
+    public void nextPattern(){ //iterate through patterns
+        currentPattern++; // use variable to remember current pattern
+        if(currentPattern >= 3)
+            currentPattern = 0;
+        if(currentPattern==0) {
+            grid = new Grid(randomArray(50,50));
+        } else if(currentPattern==1) {
+            grid = new Grid((theQueenBeeShuttlePattern()));
+        } else if (currentPattern==2) {
+            grid = new Grid(tumblerPattern());
         }
     }
-
-    public void nextPattern(){
-        grid = new Grid(randomArray(50,50));
-    }
-
-    public GridPane displaySteps(GridPane gridPane) {
-        gridPane.getChildren().clear();
+    public void displaySteps(GridPane gridPane) { // fills given grid with colours according to grid
+        gridPane.getChildren().clear(); // clear grid with previous objects to prevent stack overflow
         for (int i=0; i<grid.rows; i++) {
             for (int j=0; j<grid.columns; j++) {
                 Label label = new Label("");
-                if(grid.grid[i][j]) {
+                if(grid.grid[i][j]) { // if is alive color cell red
                     label.setStyle("-fx-background-color: red; -fx-max-width: infinity; -fx-max-height: infinity");
-                } else {
+                } else { // if is dead color cell white
                     label.setStyle("-fx-background-color: white; -fx-max-width: infinity; -fx-max-height: infinity");
                 }
                 gridPane.add(label,i,j,1,1);
             }
         }
-        grid.nextStep();
-        return gridPane;
+        grid.nextStep(); //after displaying grid prepare for next render
     }
-    public boolean[][] testGrid1() {
+    private boolean[][] theQueenBeeShuttlePattern() {
         boolean[][] grid = new boolean[50][50];
-        grid[10][10] = true;
-        grid[10][11] = true;
-        grid[11][12] = true;
-        grid[12][13] = true;
-        grid[13][13] = true;
-        grid[14][13] = true;
-        grid[15][12] = true;
-        grid[16][11] = true;
-        grid[16][10] = true;
+        grid[20][20] = true;
+        grid[20][21] = true;
+        grid[21][22] = true;
+        grid[22][23] = true;
+        grid[23][23] = true;
+        grid[24][23] = true;
+        grid[25][22] = true;
+        grid[26][21] = true;
+        grid[26][20] = true;
         return grid;
     }
+    private boolean[][] tumblerPattern() {
+        boolean[][] grid = new boolean[50][50];
+        grid[20][20] = true;
+        grid[20][21] = true;
+        grid[21][20] = true;
+        grid[21][21] = true;
+        grid[22][21] = true;
+        grid[23][21] = true;
+        grid[24][21] = true;
+        grid[25][20] = true;
+        grid[25][19] = true;
+        grid[24][19] = true;
+        grid[23][19] = true;
+        grid[22][19] = true;
 
-    public boolean[][] randomArray(int rows, int cols) {
+        grid[20][23] = true;
+        grid[20][24] = true;
+        grid[21][23] = true;
+        grid[21][24] = true;
+        grid[22][23] = true;
+        grid[23][23] = true;
+        grid[24][23] = true;
+        grid[25][24] = true;
+        grid[25][25] = true;
+        grid[24][25] = true;
+        grid[23][25] = true;
+        grid[22][25] = true;
+        return grid;
+    }
+    private boolean[][] randomArray(int rows, int cols) {
         boolean[][] array = new boolean[rows][cols];
         boolean alternating = false;
         Random random = new Random();

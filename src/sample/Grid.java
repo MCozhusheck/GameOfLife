@@ -5,39 +5,11 @@ public class Grid {
     public final int columns;
     public boolean[][] grid;
 
-    public Grid(int RowsNum, int ColumnsNum) {
-        rows = RowsNum;
-        columns = ColumnsNum;
-        grid = new boolean[rows][columns];
-        grid[0][0] = true;
-        grid[0][2] = true;
-        grid[1][1] = true;
-        grid[1][2] = true;
-        grid[2][1] = true;
-    }
-
     public Grid(boolean[][] grid) {
         rows = grid.length;
-        columns = grid[0].length;
+        columns = grid[0].length; // assume every column have same length
         this.grid = grid;
     }
-
-    public void showGrid() {
-        for(int i=0; i<rows; i++) {
-            System.out.print("|");
-            for(int j=0; j<columns; j++) {
-                if(grid[i][j]) {
-                    System.out.print(" X |");
-                } else {
-                    System.out.print("   |");
-                }
-                //System.out.print(" " + getCellAliveNeighbours(i,j) + " |");
-            }
-            System.out.println("");
-        }
-        System.out.println("\n");
-    }
-
     private int getCellAliveNeighbours(int row, int col) {
         int aliveNeigh = 0;
         if(row>0 && col>0 && grid[row-1][col-1]) {
@@ -85,7 +57,7 @@ public class Grid {
         }
         return newGrid;
     }
-    public void nextStep(){
+    public void nextStep(){ //replace current grid with next step grid
         grid = nextGrid();
     }
 }

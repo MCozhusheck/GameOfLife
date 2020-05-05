@@ -4,60 +4,35 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class Main extends Application {
 
     public final int INTERVAL = 100; // interval between every render
+    public final int COLUMNS_NUM = 50;
+    public final int ROWS_NUM = 50;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        GridPane root = new GridPane();
-        root.setGridLinesVisible(true);
+        GridPane root = initGridPane(COLUMNS_NUM, ROWS_NUM);
         Game game = new Game();
-        final int numCols = 50 ;
-        final int numRows = 50 ;
-        for (int i = 0; i < numCols; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / numCols);
-            colConst.setFillWidth(true);
-            colConst.setHgrow(Priority.ALWAYS);
-            root.getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < numRows; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / numRows);
-            rowConst.setFillHeight(true);
-            rowConst.setVgrow(Priority.ALWAYS);
-            root.getRowConstraints().add(rowConst);
-        }
         Scene scene = new Scene(root, 800, 600);
-        scene.setOnKeyPressed(e -> {
+        scene.setOnKeyPressed(e -> { // if enter is pressed get new pattern
             if(e.getCode() == KeyCode.ENTER) {
                 game.nextPattern();
             }
         });
         primaryStage.setScene(scene);
         primaryStage.show();
-        game.displaySteps(root);
 
-        final Timeline timeline = new Timeline(
+        final Timeline timeline = new Timeline( // refresh grid every given interval
                 new KeyFrame(
                         Duration.millis(INTERVAL),
                         event -> {
@@ -69,6 +44,24 @@ public class Main extends Application {
         timeline.play();
     }
 
+    public GridPane initGridPane(int colnum, int rownum) { // initiate grid with given columns and rows
+        GridPane root = new GridPane();
+        for (int i = 0; i < colnum; i++) { // add column constraint for every column
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / colnum); // setts column width
+            colConst.setFillWidth(true);
+            colConst.setHgrow(Priority.ALWAYS); // allows cell to change size if needed
+            root.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < rownum; i++) { // add row constraint for every row
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / rownum); // setts row height
+            rowConst.setFillHeight(true);
+            rowConst.setVgrow(Priority.ALWAYS); // allows cell to change size if needed
+            root.getRowConstraints().add(rowConst);
+        }
+        return root;
+    }
 
     public static void main(String[] args) {
         launch(args);
