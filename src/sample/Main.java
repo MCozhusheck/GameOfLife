@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,13 +16,20 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Main extends Application {
+
+    public final int INTERVAL = 100; // interval between every render
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         GridPane root = new GridPane();
         root.setGridLinesVisible(true);
+        Game game = new Game();
         final int numCols = 50 ;
         final int numRows = 50 ;
         for (int i = 0; i < numCols; i++) {
@@ -36,11 +46,20 @@ public class Main extends Application {
             rowConst.setVgrow(Priority.ALWAYS);
             root.getRowConstraints().add(rowConst);
         }
-        Label label = new Label("");
-        label.setStyle("-fx-background-color: red; -fx-max-width: infinity; -fx-max-height: infinity");
-        root.add(label,0,0,1,1);
-        primaryStage.setScene(new Scene(root, 1600, 1200));
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
+        game.displaySteps(root);
+
+        final Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.millis(INTERVAL),
+                        event -> {
+                            game.displaySteps(root);
+                        }
+                )
+        );
+        timeline.setCycleCount( Animation.INDEFINITE );
+        timeline.play();
     }
 
 
